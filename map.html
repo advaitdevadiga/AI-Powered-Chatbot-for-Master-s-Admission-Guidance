@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Explore Colleges Map</title>
+
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      background-color: #2d2d4f;
+      color: white;
+      padding: 15px;
+      font-size: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #map {
+      flex: 1;
+      width: 100%;
+    }
+
+    label {
+      margin-left: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    🌍 <strong>Explore Colleges Around the World</strong>
+    <div>
+      <label><input type="radio" name="path" value="mtech"> MTech</label>
+      <label><input type="radio" name="path" value="mba"> MBA</label>
+    </div>
+  </header>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const validPaths = ['mtech', 'mba'];
+    let path = urlParams.get('path');
+    if (!validPaths.includes(path)) {
+      path = 'mtech';
+    }
+
+    const radios = document.querySelectorAll('input[name="path"]');
+    radios.forEach(radio => {
+      radio.checked = radio.value === path;
+    });
+
+    const map = L.map('map').setView([20, 0], 2);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+
+    const destinations = {
+      mtech: [
+        { name: "India", coords: [20.5937, 78.9629], url: "countries/india-mtech.html" },
+        { name: "USA", coords: [37.0902, -95.7129], url: "countries/usa-mtech.html" },
+        { name: "Australia", coords: [-25.2744, 133.7751], url: "countries/australia-mtech.html" },
+        { name: "Europe", coords: [54.5260, 15.2551], url: "countries/europe-mtech.html" }
+      ],
+      mba: [
+        { name: "India", coords: [20.5937, 78.9629], url: "countries/india-mba.html" },
+        { name: "USA", coords: [37.0902, -95.7129], url: "countries/usa-mba.html" },
+        { name: "Australia", coords: [-25.2744, 133.7751], url: "countries/australia-mba.html" },
+        { name: "Europe", coords: [54.5260, 15.2551], url: "countries/europe-mba.html" }
+      ]
+    };
+
+    let markers = [];
+
+    function clearMarkers() {
+      markers.forEach(marker => map.removeLayer(marker));
+      markers = [];
+    }
+
+    function addMarkers(selectedPath) {
+      clearMarkers();
+      destinations[selectedPath].forEach(dest => {
+        const marker = L.marker(dest.coords).addTo(map);
+        marker.bindPopup(`<strong>${dest.name}</strong><br><a href="${dest.url}" target="_blank">Explore ${selectedPath.toUpperCase()} Colleges</a>`);
+        markers.push(marker);
+      });
+    }
+
+    addMarkers(path);
+
+    radios.forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        const selected = e.target.value;
+        addMarkers(selected);
+
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.set('path', selected);
+        window.history.replaceState({}, '', newUrl);
+      });
+    });
+  </script>
+</body>
+</html>

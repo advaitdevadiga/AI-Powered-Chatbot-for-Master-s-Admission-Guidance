@@ -1,0 +1,14 @@
+# Python virtual environments (recreated by start.bat)
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Secrets - never commit these
+.env

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Choose Your Path | MTech or MBA</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/chatbot.css" /> 
+</head>
+<body>
+  <button id="guide-btn" onclick="window.location.href='chatbot.html'">🧭 Guide</button>
+  <div class="main-container">
+    <div class="content">
+      <h1 class="title">🚀 Shape Your Future!</h1>
+      <p class="subtitle">Choose your path and explore endless possibilities.</p>
+      <div class="btn-container">
+      <button class="btn" onclick="navigateTo('mtech')">🎓 Pursue MTech</button>
+      <button class="btn" onclick="navigateTo('mba')">📈 Pursue MBA</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  function navigateTo(choice) {
+    window.location.href = `map.html?path=${choice}`;
+  }
+</script>
+
+  <script src="js/chatbot.js"></script>
+</body>
+</html>
